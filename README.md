@@ -1,5 +1,5 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/xfVbwuLD)
-# [GroupID] your project title
+# [Group3] 台灣電影票房預測
 The goals of this project.
 
 ## Contributors
@@ -7,6 +7,7 @@ The goals of this project.
 |-|-|-|-|
 |何大南|資科碩二|xxxxxxxxx|團隊中的吉祥物🦒，負責增進團隊氣氛| 
 |張小明|資科碩二|xxxxxxxxx|團隊的中流砥柱，一個人打十個|
+|張淑華|統計四|111304006|EDA，資料的初步探索、初步視覺化|
 
 ## Quick start
 Please provide an example command or a few commands to reproduce your analysis, such as the following R script:
