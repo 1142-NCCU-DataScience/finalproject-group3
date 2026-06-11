@@ -80,15 +80,6 @@ Null Model 在每輪皆預測訓練資料的多數類別。由於它不會預測
 - **Data Explorer**：互動探索模型使用的特徵與票房關係
 - **Raw Data**：搜尋、排序及篩選全部原始資料
 
-### Preview Locally
-
-請先將 R/RStudio 工作目錄切換至專案根目錄，再執行：
-
-```r
-library(shiny)
-runApp("code/finalproject3")
-```
-
 ## Reproduce the Analysis
 
 ### Requirements
