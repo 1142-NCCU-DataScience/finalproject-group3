@@ -52,19 +52,21 @@ finalproject-group3/
 ├── results/
 │ └── model/ # 模型輸出及效能指標
 ├── docs/
-│ ├── 1142_DS-FP_group3.pdf # 簡報（截止日：06/09）
-│ ├── discussion_log/ # 討論記錄
-│ └── user_guide/ # 使用手冊
+| ├── finalproject_group3.pptx # 期末簡報
+| ├── 分工內容.docx # 組員工作分配說明
+| ├── 評分預測模型分析報告.docx # 評分預測模型分析報告
+| └── 進階視覺化與降維分析報告.docx # 進階視覺化與降維分析報告
 └── README.md
 ```
 
 ### docs
-* Your presentation, 1142_DS-FP_groupID.ppt/pptx/pdf (i.e.,1142_DS-FP_group1.ppt), by **06.09**
-* Any related document for the project, i.e.,
-  * discussion log
-  * software user guide
-
-### `data/`
+| 檔案名稱 | 說明 |
+|---|---|
+| `finalproject_group3.pptx` | 期末簡報（含研究動機、方法、結果） |
+| `分工內容.docx` | 組員工作分配說明 |
+| `評分預測模型分析報告.docx` | 評分預測模型分析報告 |
+| `進階視覺化與降維分析報告.docx` | 進階視覺化與降維分析報告 |
+### `data`
 | 項目   | 說明                    |
 |--------|-------------------------|
 | Input  | `data/data.csv`         |
@@ -82,8 +84,8 @@ finalproject-group3/
 - 與 null model 的比較結果
 
 ### 使用套件
-- **R**：`shiny`、`tidyverse`、`ggplot2`、`rsconnect`（如有其他請自行補充）
-- **Python**：`pandas`、`matplotlib`、`scikit-learn`（如有其他請自行補充）
+- **R**：`shiny`、`tidyverse`、`ggplot2`、`rsconnect`
+- **Python**：`pandas`、`matplotlib`、`scikit-learn`
 
 ## References
 - Noble WS (2009). A Quick Guide to Organizing Computational Biology Projects. *PLoS Comput Biol* 5(7): e1000424.
