@@ -37,8 +37,6 @@ High_Revenue = revenue > 4,718,287
 - TMDB 評分人數 `vote_count`
 - TMDB 人氣值 `popularity`
 
-資料中沒有 `budget` 欄位，因此模型未使用預算作為特徵。
-
 ## Dataset
 
 - 輸入檔案：`data/data.csv`
