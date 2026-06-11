@@ -91,16 +91,6 @@ library(shiny)
 runApp("code/finalproject3")
 ```
 
-### Publish
-
-`code/finalproject3/` 是可獨立發布的 Shiny app 資料夾。重新執行模型後，發布前先同步最新模型結果與原始資料：
-
-```r
-source("code/finalproject3/finalproject3.R")
-```
-
-再從 RStudio 預覽視窗按下 **Publish**，發布 `code/finalproject3/`。
-
 ## Reproduce the Analysis
 
 ### Requirements
@@ -185,5 +175,4 @@ finalproject-group3/
 ## References
 
 - Noble, W. S. (2009). [A Quick Guide to Organizing Computational Biology Projects](https://doi.org/10.1371/journal.pcbi.1000424). *PLoS Computational Biology*, 5(7), e1000424.
-- [R Shiny](https://shiny.posit.co/)
 - [TMDB](https://www.themoviedb.org/)
