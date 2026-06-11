@@ -1,6 +1,6 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/xfVbwuLD)
 # [Group3] 台灣電影票房預測
-The goals of this project.
+台灣電影市場在 2020–2021 年疫情期間票房大幅下滑，雖於疫後逐步回升，但尚未恢復至過往高峰。我們希望片商有能力在電影上映前預測票房，以利規劃行銷資源與排片策略。
 
 ## Contributors
 |組員|系級|學號|工作分配|
@@ -8,7 +8,7 @@ The goals of this project.
 |李承儒|資科碩一|114753214|票房預測模型、DEMO app|
 |曾靖雯|資科碩一|114753206|進階視覺化與降維分析|
 |劉立翔|資科碩一|114753205|資料清洗、海報設計|
-|陳梓銜|資碩計一|115753211|評分預測模型|
+|陳梓銜|資科碩一|115753211|評分預測模型|
 |張淑華|統計四|111304006|EDA，資料的初步探索、初步視覺化|
 
 ## Quick start
