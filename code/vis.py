@@ -12,7 +12,7 @@ plt.rcParams['font.sans-serif'] = ['Microsoft JhengHei']
 plt.rcParams['axes.unicode_minus'] = False #解決負號顯示問題
 
 #匯入資料
-file_path = "data.csv"
+file_path = "./data/data.csv"
 df = pd.read_csv(file_path)
 
 #將需要的數值欄位強制轉換為數字
@@ -104,6 +104,38 @@ plot_df = pair_df[cols_to_plot].sample(n=min(800, len(pair_df)), random_state=42
 sns.pairplot(plot_df, hue='Revenue_Level', corner=True, diag_kind='kde', 
              plot_kws={'alpha': 0.6, 'edgecolor': 'w'}, palette='husl')
 plt.suptitle('多維度特徵矩陣 (Pair Plot)：高票房電影具備什麼特徵輪廓', y=1.02)
+plt.show()
+
+# ==========================================
+# Elbow Method - 尋找最佳 K 值
+# ==========================================
+
+pca_df = df.dropna(subset=num_cols).copy()
+X = pca_df[num_cols]
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+sse = []
+
+K_range = range(1, 11)
+
+for k in K_range:
+    kmeans = KMeans(
+        n_clusters=k,
+        random_state=42,
+        n_init=10
+    )
+    kmeans.fit(X_scaled)
+    sse.append(kmeans.inertia_)
+
+plt.figure(figsize=(8,5))
+plt.plot(K_range, sse, marker='o')
+plt.xlabel('群數 K')
+plt.ylabel('SSE (Inertia)')
+plt.title('Elbow Method：尋找最佳 K 值')
+plt.xticks(K_range)
+plt.grid(True)
 plt.show()
 
 # ==========================================
