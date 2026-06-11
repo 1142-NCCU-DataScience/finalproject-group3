@@ -1,0 +1,47 @@
+Box Office High-Revenue Classification
+Dataset: data.csv
+Rows used: 5245
+Validation method: stratified 6 fold cross validation
+Revenue 75th percentile threshold: 4,718,287
+High_Revenue definition: revenue > 4,718,287
+Features used: genre, year, runtime, rating, vote_count, popularity
+Split method: in round i, fold i is validation, the next fold is test, and all remaining folds are training.
+Null model: within each round, always predicts the training-set majority class.
+Note: budget column was not found and was excluded.
+
+Fold class distribution:
+ Fold Non_High_Revenue High_Revenue
+    1              656          219
+    2              656          219
+    3              656          219
+    4              656          218
+    5              655          218
+    6              655          218
+
+Cross-validation split scheme:
+ Round Validation  Test                   Training
+     1      fold1 fold2 fold3, fold4, fold5, fold6
+     2      fold2 fold3 fold1, fold4, fold5, fold6
+     3      fold3 fold4 fold1, fold2, fold5, fold6
+     4      fold4 fold5 fold1, fold2, fold3, fold6
+     5      fold5 fold6 fold1, fold2, fold3, fold4
+     6      fold6 fold1 fold2, fold3, fold4, fold5
+
+Model performance from out-of-fold predictions:
+               Model  Accuracy Precision    Recall  F1_score
+             XGBoost 0.8326025 0.7267016 0.5293669 0.6125331
+       Decision Tree 0.8242135 0.6939182 0.5308924 0.6015557
+       Random Forest 0.8259295 0.7047325 0.5225019 0.6000876
+ Logistic Regression 0.8041945 0.7482517 0.3264683 0.4545937
+          Null Model 0.7500477        NA 0.0000000        NA
+
+Best model by F1-score: XGBoost
+
+Mean permutation feature importance for best model:
+   Model    Feature Accuracy_drop    F1_drop
+ XGBoost popularity   0.092298237 0.33050503
+ XGBoost vote_count   0.017164015 0.06312434
+ XGBoost      genre   0.012772374 0.04866720
+ XGBoost       year   0.016779575 0.03911758
+ XGBoost    runtime   0.005338132 0.02295810
+ XGBoost     rating   0.003813450 0.01193084
