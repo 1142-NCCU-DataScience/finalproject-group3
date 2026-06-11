@@ -182,12 +182,6 @@ finalproject-group3/
 - `processed_high_revenue_dataset.csv`：模型使用的處理後資料
 - `model_summary.txt`：模型設定與結果摘要
 
-## Notes
-
-- 本機安裝的 R 套件位於 `r_lib/`，已由 `.gitignore` 排除，不會提交至 GitHub。
-- `rsconnect/`、`.Rhistory`、`.Rprofile` 等本機與部署 metadata 亦不會提交。
-- Shiny app 發布資料與主要分析結果各保留一份，重新跑模型後需執行同步腳本。
-
 ## References
 
 - Noble, W. S. (2009). [A Quick Guide to Organizing Computational Biology Projects](https://doi.org/10.1371/journal.pcbi.1000424). *PLoS Computational Biology*, 5(7), e1000424.
