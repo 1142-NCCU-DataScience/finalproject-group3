@@ -36,8 +36,27 @@ After rerunning the model, update the app's bundled results before publishing:
 source("code/finalproject3/finalproject3.R")
 ```
 
-## Folder organization and its related description
-idea by Noble WS (2009) [A Quick Guide to Organizing Computational Biology Projects.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000424) PLoS Comput Biol 5(7): e1000424.
+## 專案結構
+
+> 資料夾設計參考自 Noble WS (2009). [A Quick Guide to Organizing Computational Biology Projects.](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1000424) *PLoS Comput Biol* 5(7): e1000424.
+
+```text
+finalproject-group3/
+├── data/
+│ └── data.csv # 原始輸入資料
+├── code/
+│ ├── box_office_prediction.R # 票房預測主程式（R）
+│ ├── vis.py # 視覺化腳本（Python）
+│ └── finalproject3/ # 獨立 Shiny 應用程式
+│ └── finalproject3.R
+├── results/
+│ └── model/ # 模型輸出及效能指標
+├── docs/
+│ ├── 1142_DS-FP_group3.pdf # 簡報（截止日：06/09）
+│ ├── discussion_log/ # 討論記錄
+│ └── user_guide/ # 使用手冊
+└── README.md
+```
 
 ### docs
 * Your presentation, 1142_DS-FP_groupID.ppt/pptx/pdf (i.e.,1142_DS-FP_group1.ppt), by **06.09**
@@ -45,23 +64,26 @@ idea by Noble WS (2009) [A Quick Guide to Organizing Computational Biology Proje
   * discussion log
   * software user guide
 
-### data
-* Input
-  * Source
-  * Format
-  * Size
+### `data/`
+| 項目   | 說明                    |
+|--------|-------------------------|
+| Input  | `data/data.csv`         |
+| Source | 台灣電影資料（公開來源） |
+| Format | CSV                     |
 
-### code
-* Analysis steps
-* Which method or package do you use?
-* How do you perform training and evaluation?
-  * Cross-validation, or extra separated data
-* What is a null model for comparison?
+### `code`
+- **分析流程**：資料清洗 → EDA → 特徵工程 → 模型訓練與評估
+- **使用方法 / 套件**：R（tidyverse、shiny、…）、Python（pandas、matplotlib、…）
+- **訓練與評估**：採交叉驗證（cross-validation）
+- **比較基準（null model）**：以歷史平均票房作為 baseline
 
-### results
-* What is your performance?
-* Is the improvement significant?
+### `results`
+- 各模型預測效能指標（RMSE、MAE、R² 等）
+- 與 null model 的比較結果
+
+### 使用套件
+- **R**：`shiny`、`tidyverse`、`ggplot2`、`rsconnect`（如有其他請自行補充）
+- **Python**：`pandas`、`matplotlib`、`scikit-learn`（如有其他請自行補充）
 
 ## References
-* Packages you use
-* Related publications
+- Noble WS (2009). A Quick Guide to Organizing Computational Biology Projects. *PLoS Comput Biol* 5(7): e1000424.
