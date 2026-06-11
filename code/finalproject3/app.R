@@ -13,8 +13,14 @@ find_project_root <- function() {
 
 project_root <- find_project_root()
 model_dir <- file.path(project_root, "results", "model")
-local_lib <- file.path(project_root, "r_lib")
-if (dir.exists(local_lib)) .libPaths(c(local_lib, .libPaths()))
+lib_roots <- unique(c(
+  project_root,
+  dirname(project_root),
+  dirname(dirname(project_root))
+))
+local_libs <- file.path(lib_roots, "r_lib")
+local_libs <- local_libs[dir.exists(local_libs)]
+if (length(local_libs) > 0) .libPaths(c(local_libs, .libPaths()))
 
 library(shiny)
 library(ggplot2)
@@ -29,9 +35,15 @@ performance <- read_model_csv("model_performance.csv")
 importance <- read_model_csv("feature_importance_permutation.csv")
 predictions <- read_model_csv("out_of_fold_predictions.csv")
 processed <- read_model_csv("processed_high_revenue_dataset.csv")
-fold_summary <- read_model_csv("cv_fold_summary.csv")
-split_scheme <- read_model_csv("cv_split_scheme.csv")
-
+raw_data_path <- file.path(project_root, "data", "data.csv")
+if (!file.exists(raw_data_path)) stop("Missing raw data: ", raw_data_path)
+raw_data <- read.csv(raw_data_path, check.names = FALSE, stringsAsFactors = FALSE, fileEncoding = "UTF-8-BOM")
+raw_country_choices <- sort(unique(raw_data$國別[
+  !is.na(raw_data$國別) & trimws(raw_data$國別) != ""
+]))
+raw_language_choices <- sort(unique(raw_data$original_language[
+  !is.na(raw_data$original_language) & trimws(raw_data$original_language) != ""
+]))
 model_names <- performance$Model
 model_columns <- setNames(gsub("[^A-Za-z0-9]+", "_", model_names), model_names)
 feature_names <- intersect(c("year", "runtime", "rating", "vote_count", "popularity", "revenue"), names(processed))
@@ -224,15 +236,6 @@ ui <- fluidPage(
       )
     ),
     tabPanel(
-      "Cross Validation",
-      fluidRow(
-        column(6, plotOutput("fold_plot", height = "430px")),
-        column(6, h4("Cross-validation split scheme"), tableOutput("split_table"))
-      ),
-      h4("Fold class distribution"),
-      tableOutput("fold_table")
-    ),
-    tabPanel(
       "Data Explorer",
       sidebarLayout(
         sidebarPanel(
@@ -245,6 +248,31 @@ ui <- fluidPage(
           sliderInput("data_sample", "Sample size", min = 300, max = min(5000, nrow(processed)), value = min(1800, nrow(processed)), step = 100)
         ),
         mainPanel(width = 9, plotOutput("data_plot", height = "560px"))
+      )
+    ),
+    tabPanel(
+      "Raw Data",
+      sidebarLayout(
+        sidebarPanel(
+          width = 3,
+          h4("Raw data filters"),
+          selectInput("raw_country", "Country", choices = c("All", raw_country_choices), selected = "All"),
+          selectInput("raw_match_status", "Match status", choices = c("All", sort(unique(raw_data$match_status))), selected = "All"),
+          selectInput("raw_language", "Original language", choices = c("All", raw_language_choices), selected = "All"),
+          checkboxInput("raw_matched_only", "Rows with TMDB ID only", value = FALSE),
+          helpText("Use the search boxes above the table to search individual columns.")
+        ),
+        mainPanel(
+          width = 9,
+          div(
+            class = "metric-row",
+            metric_card("Filtered Rows", "raw_filtered_rows"),
+            metric_card("Total Rows", "raw_total_rows"),
+            metric_card("Columns", "raw_total_columns"),
+            metric_card("Countries", "raw_total_countries")
+          ),
+          DT::DTOutput("raw_data_table")
+        )
       )
     )
   )
@@ -376,21 +404,6 @@ server <- function(input, output, session) {
     head(dat[, c("row_id", "fold", "revenue", "actual", "predicted", "result")], input$prediction_rows)
   }, striped = TRUE, bordered = TRUE, spacing = "s")
 
-  output$fold_plot <- renderPlot({
-    dat <- rbind(
-      data.frame(Fold = fold_summary$Fold, Class = "Non High Revenue", Count = fold_summary$Non_High_Revenue),
-      data.frame(Fold = fold_summary$Fold, Class = "High Revenue", Count = fold_summary$High_Revenue)
-    )
-    ggplot(dat, aes(x = factor(Fold), y = Count, fill = Class)) +
-      geom_col(width = 0.68) +
-      scale_fill_manual(values = c("High Revenue" = "#dc2626", "Non High Revenue" = "#2563eb")) +
-      labs(title = "Stratified fold class distribution", x = "Fold", y = "Rows", fill = "Class") +
-      app_theme()
-  })
-
-  output$split_table <- renderTable(split_scheme, striped = TRUE, bordered = TRUE, spacing = "s")
-  output$fold_table <- renderTable(fold_summary, striped = TRUE, bordered = TRUE, spacing = "s")
-
   output$data_plot <- renderPlot({
     req(input$data_x, input$data_y, input$data_color)
     validate(need(input$data_x != input$data_y, "Choose different X and Y variables."))
@@ -415,6 +428,37 @@ server <- function(input, output, session) {
     if (isTRUE(input$data_log_y)) plot <- plot + scale_y_log10()
     plot
   })
+
+  filtered_raw_data <- reactive({
+    dat <- raw_data
+    if (!identical(input$raw_country, "All")) dat <- dat[dat$國別 == input$raw_country, , drop = FALSE]
+    if (!identical(input$raw_match_status, "All")) dat <- dat[dat$match_status == input$raw_match_status, , drop = FALSE]
+    if (!identical(input$raw_language, "All")) dat <- dat[dat$original_language == input$raw_language, , drop = FALSE]
+    if (isTRUE(input$raw_matched_only)) dat <- dat[!is.na(dat$tmdb_id) & dat$tmdb_id != "", , drop = FALSE]
+    dat
+  })
+
+  output$raw_filtered_rows <- renderText(format(nrow(filtered_raw_data()), big.mark = ","))
+  output$raw_total_rows <- renderText(format(nrow(raw_data), big.mark = ","))
+  output$raw_total_columns <- renderText(ncol(raw_data))
+  output$raw_total_countries <- renderText(length(unique(raw_data$國別)))
+
+  output$raw_data_table <- DT::renderDT({
+    DT::datatable(
+      filtered_raw_data(),
+      rownames = FALSE,
+      filter = "top",
+      extensions = "Scroller",
+      options = list(
+        pageLength = 25,
+        lengthMenu = c(10, 25, 50, 100),
+        scrollX = TRUE,
+        scrollY = "560px",
+        scroller = TRUE,
+        deferRender = TRUE
+      )
+    )
+  }, server = TRUE)
 }
 
 shinyApp(ui = ui, server = server)
